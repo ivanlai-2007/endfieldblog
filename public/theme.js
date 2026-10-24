@@ -1,0 +1,1 @@
+try{const saved=localStorage.getItem('field-theme');document.documentElement.dataset.theme=['light','dark'].includes(saved)?saved:matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}catch{}

@@ -1,0 +1,74 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run build",
+  "outputDirectory": "public",
+  "cleanUrls": true,
+  "regions": [
+    "hnd1"
+  ],
+  "functions": {
+    "api/router.js": {
+      "maxDuration": 30,
+      "includeFiles": "public/index.html"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/photos/:id",
+      "destination": "/api/router?route=page&kind=photos&id=:id"
+    },
+    {
+      "source": "/notes/:id",
+      "destination": "/api/router?route=page&kind=notes&id=:id"
+    },
+    {
+      "source": "/sitemap.xml",
+      "destination": "/api/router?route=sitemap"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "/api/router?route=:path*"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        }
+      ]
+    },
+    {
+      "source": "/admin",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    }
+  ]
+}

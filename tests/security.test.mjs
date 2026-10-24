@@ -1,0 +1,12 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import seed from './helpers/content-fixture.mjs';
+import {publicContent,validateContent,markdownHtml} from '../server/content.mjs';
+import {makeSession,verifySession,assertOrigin,passwordHash,passwordMatches} from '../server/auth.mjs';
+process.env.SESSION_SECRET='test-only-session-key-which-is-long-enough';
+test('草稿與封存內容不會出現在公開資料',()=>{const data=structuredClone(seed);data.notes.push({id:'private-draft',title:'私密',status:'draft',markdown:'不應出現'});data.photos.push({...data.photos[0],id:'private-photo',status:'draft'});data.friends.push({...data.friends[0],id:'hidden-friend',status:'archived'});const result=publicContent(data);assert.ok(!JSON.stringify(result).includes('private-draft'));assert.equal(result.photos.length,seed.photos.length);assert.equal(result.friends.length,seed.friends.length);});
+test('不能注入外部圖片網址',()=>{const data=structuredClone(seed);data.photos[0].file='https://untrusted.example/p.png';assert.throws(()=>validateContent(data),/本站照片/);});
+test('Markdown 清理腳本、事件屬性、危險連結，保留程式碼與本站圖片',()=>{const html=markdownHtml('<script>alert(1)</script>\n\n[危險](javascript:alert(1))\n\n![圖片](/assets/mountain.jpg)\n\n```js\nconst x=1\n```\n\n<img src="https://untrusted.example/x" onerror="alert(1)">');assert.ok(!html.includes('<script'));assert.ok(!html.includes('javascript:'));assert.ok(!html.includes('onerror'));assert.ok(!html.includes('untrusted.example'));assert.ok(html.includes('/assets/mountain.jpg'));assert.ok(html.includes('<pre><code'));});
+test('管理 Session 簽章及版本都必須正確',()=>{const cookie=makeSession(2);const request=new Request('https://field.example/admin',{headers:{cookie:'field_session='+cookie}});assert.equal(verifySession(request,2),true);assert.equal(verifySession(request,3),false);const tampered=new Request('https://field.example/admin',{headers:{cookie:'field_session='+cookie.slice(0,-3)+'abc'}});assert.equal(verifySession(tampered,2),false);});
+test('管理寫入只接受同來源請求',()=>{assert.doesNotThrow(()=>assertOrigin(new Request('https://field.example/api/admin/content',{headers:{origin:'https://field.example'}})));assert.throws(()=>assertOrigin(new Request('https://field.example/api/admin/content',{headers:{origin:'https://other.example'}})),/來源驗證/);});
+test('密碼使用帶鹽 scrypt，錯誤密碼無法通過',async()=>{const value='test-only-owner-passphrase';const hash=await passwordHash(value);assert.ok(!hash.includes(value));assert.equal(await passwordMatches(value,hash),true);assert.equal(await passwordMatches('incorrect',hash),false);});

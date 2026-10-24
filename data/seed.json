@@ -1,0 +1,57 @@
+{
+  "photos": [],
+  "looks": [
+    {
+      "id": "original",
+      "title": "原圖",
+      "en": "ORIGINAL",
+      "filter": "none",
+      "description": "保留照片原本的色彩與明暗。"
+    },
+    {
+      "id": "vivid",
+      "title": "鮮明",
+      "en": "VIVID",
+      "filter": "saturate(1.48) contrast(1.12) brightness(1.02)",
+      "description": "提高飽和度與對比，讓景物更清晰鮮明。"
+    },
+    {
+      "id": "dream",
+      "title": "柔夢",
+      "en": "DREAM",
+      "filter": "contrast(.82) brightness(1.15) saturate(.78) sepia(.14)",
+      "description": "提亮暗部，讓光線與色彩柔和一點。"
+    },
+    {
+      "id": "morning",
+      "title": "晨光",
+      "en": "MORNING",
+      "filter": "sepia(.3) saturate(.95) contrast(.94) brightness(1.09)",
+      "description": "加入溫暖色調，保留明亮而柔和的光感。"
+    },
+    {
+      "id": "denim",
+      "title": "丹寧",
+      "en": "DENIM",
+      "filter": "url(#filter-denim) contrast(1.06)",
+      "description": "壓低飽和度，讓陰影帶一點冷調。"
+    },
+    {
+      "id": "graphite",
+      "title": "石墨",
+      "en": "GRAPHITE",
+      "filter": "grayscale(1) contrast(1.32) brightness(.97)",
+      "description": "拿掉色彩，留下結構與明暗的層次。"
+    }
+  ],
+  "friends": [],
+  "notes": [],
+  "settings": {
+    "name": "FIELD / PERSONAL ARCHIVE",
+    "title": "攝影與計算機",
+    "description": "攝影、色彩與計算機的個人檔案。",
+    "intro": "在這裡記錄觀察與創作。\n可以從管理後台修改這段介紹。",
+    "headline": "把觀察，留在這裡。",
+    "author": "FIELD"
+  }
+}
