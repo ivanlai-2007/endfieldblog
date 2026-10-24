@@ -1,5 +1,5 @@
 # 專案授權狀態
 
-此架構備份沒有替原專案新增開源授權，也沒有代替擁有者授予 MIT 等授權。若要作為公開開源專案發佈，可由擁有者另行決定並加入 LICENSE。
+Copyright (c) 2026 ivanlai-2007
 
 隨附字體、第三方程式及參考素材各自受原授權約束，見 THIRD_PARTY_NOTICES.md、licenses/ 及字體目錄中的 OFL 文件。
